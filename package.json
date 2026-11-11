@@ -1,16 +1,18 @@
 {
   "name": "json-api-builder",
-  "version": "1.1.1",
-  "private": true,
+  "version": "1.1.2",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "node src/index.js",
-    "check": "node scripts/check-output.js",
-    "test": "node --test",
-    "start": "node output/server.js"
+    "folders": "node steps/01-create-folders.mjs",
+    "files": "node steps/02-create-files.mjs",
+    "content": "node steps/03-insert-content.mjs",
+    "build": "npm run folders && npm run files && npm run content"
   },
   "dependencies": {
-    "hono": "^4.6.0",
-    "@hono/node-server": "^1.13.0"
+    "astring": "^1.9.0",
+    "json-traversal-core": "1.2.1"
   }
 }
