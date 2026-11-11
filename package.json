@@ -1,27 +1,23 @@
 {
   "name": "json-api-builder",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "type": "module",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "folders": "node ./bin/json-api-builder.js folders",
-    "files": "node ./bin/json-api-builder.js files",
-    "content": "node ./bin/json-api-builder.js content",
-    "build": "node ./bin/json-api-builder.js build",
-    "v8:folders": "node ./test/v8/create-folders.js",
-    "v8:files": "node ./test/v8/create-files.js",
-    "v8:content": "node ./test/v8/insert-content.js",
-    "v8:routes": "node ./test/v8/hook-routes.js",
-    "v8:app": "node ./test/v8/app/create-app.js",
-    "v8:endpoints": "node ./test/v8/endpoints/file-sync.js",
-    "v8:app-hooks": "node ./test/v8/app/hook-app-strategies.js",
-    "v8:build": "node ./test/v8/build.js",
-    "v8:test": "node --test ./test/v8/v8.test.js ./test/v8/validation/runtime.test.js",
-    "v8:runtime-test": "node --test ./test/v8/validation/runtime.test.js",
-    "v8:start": "node ./test/v8/output/app.js",
-    "v8:validate": "node --test ./test/v8/validation/runtime.test.js"
+    "v9:folders": "node ./test/v9/create-folders.js",
+    "v9:files": "node ./test/v9/create-files.js",
+    "v9:content": "node ./test/v9/insert-content.js",
+    "v9:routes": "node ./test/v9/hook-routes.js",
+    "v9:app": "node ./test/v9/app/create-app.js",
+    "v9:endpoints": "node ./test/v9/endpoints/file-sync.js && node ./test/v9/endpoints/create-endpoints.js",
+    "v9:app-hooks": "node ./test/v9/app/hook-app-strategies.js",
+    "v9:build": "node ./test/v9/build.js",
+    "v9:test": "node --test --test-concurrency=1 ./test/v9/v9.test.js ./test/v9/validation/runtime.test.js",
+    "v9:runtime-test": "node --test ./test/v9/validation/runtime.test.js",
+    "v9:start": "node ./test/v9/output/app.js",
+    "v9:validate": "node --test --test-concurrency=1 ./test/v9/v9.test.js ./test/v9/validation/runtime.test.js"
   },
   "dependencies": {
     "astring": "^1.9.0",
@@ -29,15 +25,10 @@
     "hono": "^4.10.6",
     "@hono/node-server": "^1.19.6"
   },
-  "main": "./src/index.js",
+  "main": "./src/v9/index.js",
   "exports": {
-    ".": "./src/v8/index.js",
-    "./v3": "./src/v3/index.js",
-    "./v3/steps/*": "./src/v3/steps/*",
-    "./v8": "./src/v8/index.js",
-    "./v8/*": "./src/v8/*"
-  },
-  "bin": {
-    "json-api-builder": "./bin/json-api-builder.js"
+    ".": "./src/v9/index.js",
+    "./v9": "./src/v9/index.js",
+    "./v9/*": "./src/v9/*"
   }
 }

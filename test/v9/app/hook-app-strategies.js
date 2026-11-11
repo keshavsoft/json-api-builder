@@ -1,6 +1,6 @@
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { hookAppStrategies } from "../../../src/v8/index.js";
+import { hookAppStrategies } from "../../../src/v9/index.js";
 
 const clientRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 export function run() {

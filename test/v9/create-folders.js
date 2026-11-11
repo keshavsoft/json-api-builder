@@ -1,6 +1,6 @@
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { createFolders } from "../../src/index.js";
+import { createFolders } from "../../src/v9/index.js";
 
 const clientRoot = path.dirname(fileURLToPath(import.meta.url));
 

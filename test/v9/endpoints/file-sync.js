@@ -1,6 +1,6 @@
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { createFileSyncEndpoint } from "../../../src/v8/index.js";
+import { createFileSyncEndpoint } from "../../../src/v9/index.js";
 
 const clientRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 export function run() {
