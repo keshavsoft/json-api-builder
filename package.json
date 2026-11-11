@@ -1,18 +1,27 @@
 {
   "name": "json-api-builder",
-  "version": "1.1.2",
+  "version": "1.3.1",
   "type": "module",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "folders": "node steps/01-create-folders.mjs",
-    "files": "node steps/02-create-files.mjs",
-    "content": "node steps/03-insert-content.mjs",
-    "build": "npm run folders && npm run files && npm run content"
+    "folders": "node ./bin/json-api-builder.js folders",
+    "files": "node ./bin/json-api-builder.js files",
+    "content": "node ./bin/json-api-builder.js content",
+    "build": "node ./bin/json-api-builder.js build"
   },
   "dependencies": {
     "astring": "^1.9.0",
     "json-traversal-core": "1.2.1"
+  },
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./v3": "./src/v3/index.js",
+    "./v3/steps/*": "./src/v3/steps/*"
+  },
+  "bin": {
+    "json-api-builder": "./bin/json-api-builder.js"
   }
 }
