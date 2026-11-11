@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "name": "City Hospital",
+    "location": "Kakinada"
+  },
+  {
+    "id": 2,
+    "name": "Apollo Clinic",
+    "location": "Rajahmundry"
+  }
+]
