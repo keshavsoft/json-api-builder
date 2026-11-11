@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JSON API Builder — Technical Documentation</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #172033;
+            --muted: #5b6475;
+            --line: #dce2eb;
+            --surface: #f5f7fb;
+            --accent: #3157c8;
+            --code: #101827;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+            color: var(--ink);
+            background: #fff;
+        }
+
+        header {
+            background: #101b35;
+            color: #fff;
+            padding: 52px max(24px, calc((100% - 1060px)/2));
+        }
+
+        header p {
+            max-width: 760px;
+            color: #d3dbee;
+            margin-bottom: 0;
+        }
+
+        header .eyebrow {
+            color: #aebff5;
+            font-size: .8rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.4rem);
+            line-height: 1.1;
+            margin: .5rem 0 1rem;
+        }
+
+        main {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 32px 24px 80px;
+        }
+
+        h2 {
+            margin-top: 2.6rem;
+            padding-bottom: .45rem;
+            border-bottom: 1px solid var(--line);
+            font-size: 1.55rem;
+        }
+
+        h3 {
+            margin-top: 1.6rem;
+            font-size: 1.12rem;
+        }
+
+        p,
+        li {
+            color: #30394a;
+        }
+
+        .lead {
+            font-size: 1.1rem;
+            color: var(--muted);
+        }
+
+        .notice {
+            border-left: 4px solid var(--accent);
+            background: #f1f4ff;
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 12px;
+            margin: 18px 0;
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 16px;
+            background: #fff;
+        }
+
+        .card strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        pre {
+            overflow: auto;
+            padding: 18px;
+            border-radius: 10px;
+            background: var(--code);
+            color: #e7edf7;
+            font: .9rem/1.55 ui-monospace, SFMono-Regular, Consolas, monospace;
+        }
+
+        code {
+            font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        }
+
+        :not(pre)>code {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: .08rem .3rem;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 16px 0;
+        }
+
+        th,
+        td {
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+            padding: 10px 12px;
+            vertical-align: top;
+        }
+
+        th {
+            background: var(--surface);
+        }
+
+        .tag {
+            display: inline-block;
+            border: 1px solid #cbd5ef;
+            color: #2949a5;
+            background: #f1f4ff;
+            padding: 2px 9px;
+            border-radius: 99px;
+            font-size: .8rem;
+            font-weight: 700;
+        }
+
+        footer {
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            padding: 24px;
+            text-align: center;
+        }
+
+        @media (max-width:600px) {
+            header {
+                padding: 36px 22px;
+            }
+
+            main {
+                padding: 24px 18px 56px;
+            }
+
+            table {
+                font-size: .9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="eyebrow">Technical documentation · Version 1.7.0</div>
+        <h1>JSON API Builder</h1>
+        <p>A traversal-driven Node.js project generator. V7 builds a client project from a JSON directory tree, inserts
+            an ESTree-based Hono template, and connects nested route modules.</p>
+    </header>
+    <main>
+        <p class="lead">This document describes the implementation available in V7. It distinguishes working
+            functionality from planned capabilities so the current scope is clear.</p>
+
+        <div class="notice"><strong>Current architecture:</strong> <code>src/v7</code> contains reusable package code.
+            <code>test/v7</code> is a version-specific client project containing input, individual runners, a combined
+            runner, tests, and generated output.</div>
+
+        <h2>1. Project layout</h2>
+        <pre>json-api-builder/
+├── src/
+│   ├── index.js
+│   ├── v1/ ... v6/
+│   └── v7/
+│       ├── index.js
+│       ├── create-folders.js
+│       ├── create-files.js
+│       ├── insert-content.js
+│       ├── hook-routes.js
+│       └── build.js
+├── test/
+│   └── v7/
+│       ├── input/
+│       │   ├── source-of-truth/
+│       │   ├── data/
+│       │   └── api.json
+│       ├── output/
+│       ├── create-folders.js
+│       ├── create-files.js
+│       ├── insert-content.js
+│       ├── hook-routes.js
+│       ├── build.js
+│       └── v7.test.js
+├── bin/
+└── package.json</pre>
+
+        <h2>2. Input: the tree definition</h2>
+        <p><code>test/v7/input/source-of-truth/tree.json</code> currently defines the folder and file hierarchy:</p>
+        <pre>{
+  "api": {
+    "routes.js": "routes.estree.json",
+    "v1": {
+      "routes.js": "routes.estree.json",
+      "clinics": {
+        "routes.js": "routes.estree.json"
+      }
+    }
+  }
+}</pre>
+        <ul>
+            <li>Object-valued nodes represent directories.</li>
+            <li>String-valued entries represent files.</li>
+            <li>The string value points to an AST definition relative to <code>source-of-truth</code>.</li>
+            <li>Traversal stages derive output locations from this tree.</li>
+        </ul>
+        <p>The intended rule is that changing a child directory name in the tree changes its generated folder and route
+            connection. V7 derives route import paths and mount paths from child names.</p>
+
+        <h2>3. The processing stages</h2>
+        <div class="grid">
+            <div class="card"><strong>01 · Create folders</strong>Traverses the tree and creates directory nodes under
+                the client output folder.</div>
+            <div class="card"><strong>02 · Create files</strong>Creates empty files for string-valued leaves. Existing
+                files are left untouched.</div>
+            <div class="card"><strong>03 · Insert content</strong>Loads the referenced ESTree JSON, generates JavaScript
+                with Astring, and writes it to the corresponding file.</div>
+            <div class="card"><strong>04 · Hook routes</strong>Derives child imports and Hono <code>app.route()</code>
+                registrations from the tree.</div>
+        </div>
+
+        <h2>4. Route composition</h2>
+        <p>Given the tree above, the intended generated hierarchy is:</p>
+        <pre>output/
+└── api/
+    ├── routes.js
+    └── v1/
+        ├── routes.js
+        └── clinics/
+            └── routes.js</pre>
+        <p>The root route module imports and mounts the V1 module:</p>
+        <pre>import { Hono } from "hono";
+import v1Routes from "./v1/routes.js";
+
+const app = new Hono();
+app.route("/v1", v1Routes);
+
+export default app;</pre>
+        <p>The V1 module similarly imports and mounts Clinics at <code>/clinics</code>. The route variable name,
+            relative import path, and mount path are derived from the child directory name.</p>
+
+        <h2>5. Individual tasks and combined execution</h2>
+        <p>Each test runner exports a <code>run()</code> function. It runs automatically when executed directly, but can
+            also be imported by the combined runner.</p>
+        <pre>import { run as createFolders } from "./create-folders.js";
+import { run as createFiles } from "./create-files.js";
+import { run as insertContent } from "./insert-content.js";
+import { run as hookRoutes } from "./hook-routes.js";
+
+export function run() {
+    const foldersResult = createFolders();
+    createFiles();
+    insertContent();
+    hookRoutes();
+    return foldersResult;
+}</pre>
+        <p>This means the combined test runner reuses the same individual test operations instead of implementing a
+            second copy of their sequence.</p>
+
+        <h2>6. Run V7</h2>
+        <h3>Install</h3>
+        <pre>npm install</pre>
+        <h3>Run individual tasks</h3>
+        <pre>npm run v7:folders
+npm run v7:files
+npm run v7:content
+npm run v7:hooks</pre>
+        <h3>Run the combined pipeline</h3>
+        <pre>npm run v7:build</pre>
+        <h3>Run automated tests</h3>
+        <pre>npm run v7:test</pre>
+        <p>Generated output is written to <code>test/v7/output/</code>. The V7 test runners pass <code>test/v7</code> as
+            the client root; generated files are not written into <code>src</code>.</p>
+
+        <h2>7. Public package API</h2>
+        <p>The package root entry point currently re-exports V7 functionality. The implementation accepts a
+            <code>clientRoot</code> option and defaults to the current working directory.</p>
+        <pre>import {
+    createFolders,
+    createFiles,
+    insertContent,
+    hookRoutes,
+    build
+} from "json-api-builder";
+
+build({
+    clientRoot: "./my-client-project"
+});</pre>
+        <p>The expected client input layout is <code>my-client-project/input/source-of-truth/tree.json</code>, with
+            referenced AST definitions alongside it. Generated output defaults to <code>my-client-project/output</code>.
+        </p>
+
+        <h2>8. Current implementation boundaries</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Capability</th>
+                    <th>V7 status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Folder and file generation from tree</td>
+                    <td><span class="tag">Implemented</span></td>
+                </tr>
+                <tr>
+                    <td>ESTree template generation using Astring</td>
+                    <td><span class="tag">Implemented</span></td>
+                </tr>
+                <tr>
+                    <td>Tree-derived nested Hono route hooks</td>
+                    <td><span class="tag">Implemented</span></td>
+                </tr>
+                <tr>
+                    <td>Individual and combined test runners</td>
+                    <td><span class="tag">Implemented</span></td>
+                </tr>
+                <tr>
+                    <td>OpenAPI-driven CRUD handler generation</td>
+                    <td><span class="tag">Not yet implemented</span></td>
+                </tr>
+                <tr>
+                    <td>Parsing and modifying arbitrary existing JS files as AST</td>
+                    <td><span class="tag">Not yet implemented</span></td>
+                </tr>
+                <tr>
+                    <td>Full OpenAPI/tree consistency validation</td>
+                    <td><span class="tag">Not yet implemented</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>9. Design principles</h2>
+        <ol>
+            <li>Keep project structure in a machine-readable tree.</li>
+            <li>Use the same traversal mechanism for each independent stage.</li>
+            <li>Keep filesystem and AST operations in stage-specific functions.</li>
+            <li>Let the client run stages individually or compose them in order.</li>
+            <li>Generate JavaScript from structured representations rather than relying on fragile text insertion.</li>
+        </ol>
+
+        <h2>10. Dependencies</h2>
+        <ul>
+            <li><code>json-traversal-core</code> — traversal of the JSON tree.</li>
+            <li><code>astring</code> — generation of JavaScript source from ESTree AST data.</li>
+        </ul>
+    </main>
+    <footer>JSON API Builder · V7 documentation · 1.7.0</footer>
+</body>
+
+</html>
