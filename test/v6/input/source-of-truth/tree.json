@@ -1,9 +1,9 @@
 {
-  "API": {
+  "api": {
     "routes.js": "routes.estree.json",
-    "V1": {
+    "v1": {
       "routes.js": "routes.estree.json",
-      "Clinics": {
+      "clinics": {
         "routes.js": "routes.estree.json"
       }
     }
