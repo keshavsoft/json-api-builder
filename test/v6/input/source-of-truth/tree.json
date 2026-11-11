@@ -1,0 +1,11 @@
+{
+  "API": {
+    "routes.js": "routes.estree.json",
+    "V1": {
+      "routes.js": "routes.estree.json",
+      "Clinics": {
+        "routes.js": "routes.estree.json"
+      }
+    }
+  }
+}
