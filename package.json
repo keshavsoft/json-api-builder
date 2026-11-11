@@ -1,6 +1,6 @@
 {
   "name": "json-api-builder",
-  "version": "1.7.1",
+  "version": "1.9.1",
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -9,17 +9,33 @@
     "folders": "node ./bin/json-api-builder.js folders",
     "files": "node ./bin/json-api-builder.js files",
     "content": "node ./bin/json-api-builder.js content",
-    "build": "node ./bin/json-api-builder.js build"
+    "build": "node ./bin/json-api-builder.js build",
+    "v8:folders": "node ./test/v8/create-folders.js",
+    "v8:files": "node ./test/v8/create-files.js",
+    "v8:content": "node ./test/v8/insert-content.js",
+    "v8:routes": "node ./test/v8/hook-routes.js",
+    "v8:app": "node ./test/v8/app/create-app.js",
+    "v8:endpoints": "node ./test/v8/endpoints/file-sync.js",
+    "v8:app-hooks": "node ./test/v8/app/hook-app-strategies.js",
+    "v8:build": "node ./test/v8/build.js",
+    "v8:test": "node --test ./test/v8/v8.test.js ./test/v8/validation/runtime.test.js",
+    "v8:runtime-test": "node --test ./test/v8/validation/runtime.test.js",
+    "v8:start": "node ./test/v8/output/app.js",
+    "v8:validate": "node --test ./test/v8/validation/runtime.test.js"
   },
   "dependencies": {
     "astring": "^1.9.0",
-    "json-traversal-core": "1.2.1"
+    "json-traversal-core": "1.2.1",
+    "hono": "^4.10.6",
+    "@hono/node-server": "^1.19.6"
   },
   "main": "./src/index.js",
   "exports": {
-    ".": "./src/index.js",
+    ".": "./src/v8/index.js",
     "./v3": "./src/v3/index.js",
-    "./v3/steps/*": "./src/v3/steps/*"
+    "./v3/steps/*": "./src/v3/steps/*",
+    "./v8": "./src/v8/index.js",
+    "./v8/*": "./src/v8/*"
   },
   "bin": {
     "json-api-builder": "./bin/json-api-builder.js"

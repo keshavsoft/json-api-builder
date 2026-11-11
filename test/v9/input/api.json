@@ -1,0 +1,49 @@
+{
+  "root": "api",
+  "port": 3000,
+  "routes": {
+    "v1": {
+      "clinics": {
+        "resource": "clinics",
+        "idField": "id",
+        "endpoints": [
+          {
+            "method": "GET",
+            "path": "/",
+            "operation": "list"
+          },
+          {
+            "method": "POST",
+            "path": "/",
+            "operation": "create"
+          },
+          {
+            "method": "GET",
+            "path": "/:id",
+            "operation": "read"
+          },
+          {
+            "method": "PUT",
+            "path": "/:id",
+            "operation": "update"
+          },
+          {
+            "method": "DELETE",
+            "path": "/:id",
+            "operation": "delete"
+          }
+        ],
+        "dataFile": "data/clinics.json"
+      }
+    }
+  },
+  "strategies": {
+    "fs": {
+      "file-sync": {
+        "method": "GET",
+        "path": "/file-sync",
+        "dataFile": "data/players.json"
+      }
+    }
+  }
+}

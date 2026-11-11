@@ -1,0 +1,5 @@
+[
+  { "id": 1, "name": "Arjun", "role": "Batter" },
+  { "id": 2, "name": "Maya", "role": "Bowler" },
+  { "id": 3, "name": "Ravi", "role": "All-rounder" }
+]
